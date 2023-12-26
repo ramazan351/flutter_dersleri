@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_dersi3/screens/app_button.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -67,31 +68,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     child: ListView.builder(
                       itemCount: usersList.length,
                       itemBuilder: (context, index) {
-                        return Container(
-                          margin: const EdgeInsets.only(bottom: 12),
-                          padding: const EdgeInsets.all(8),
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(12),
-                              gradient: const LinearGradient(
-                                  colors: [Color(0xff220045), Colors.white],
-                                  begin: Alignment.center)),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              nameAndSurnameTextArae(
-                                  name: usersList[index]['name'] ?? "",
-                                  surname: usersList[index]['surname'] ?? ""),
-                              IconButton(
-                                onPressed: () {},
-                                icon: const Icon(
-                                  Icons.delete,
-                                  color: Colors.red,
-                                  size: 32,
-                                ),
-                              )
-                            ],
-                          ),
-                        );
+                        return myListTile(index);
                       },
                     ),
                   )
@@ -107,18 +84,61 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
+  Container myListTile(int index) {
+    return Container(
+      margin: const EdgeInsets.only(bottom: 12),
+      padding: const EdgeInsets.all(8),
+      decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(12),
+          gradient: const LinearGradient(
+              colors: [Color(0xff220045), Colors.white],
+              begin: Alignment.center)),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          nameAndSurnameTextArae(
+              name: usersList[index]['name'] ?? "",
+              surname: usersList[index]['surname'] ?? "",
+              age: usersList[index]['age'] ?? ""),
+          IconButton(
+            onPressed: () {
+              deleteUser(index);
+            },
+            icon: const Icon(
+              Icons.delete,
+              color: Colors.red,
+              size: 32,
+            ),
+          )
+        ],
+      ),
+    );
+  }
+
+  void deleteUser(int index) {
+    usersList.removeAt(index);
+    setState(() {});
+  }
+
   Column nameAndSurnameTextArae(
-      {required String name, required String surname}) {
+      {required String name, required String surname, required String age}) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
           "Adı: $name",
-          style: const TextStyle(color: Colors.white, fontSize: 18),
+          style: const TextStyle(
+              color: Colors.white, fontSize: 18, fontWeight: FontWeight.w600),
         ),
         Text(
           "Soyadı: $surname",
-          style: const TextStyle(color: Colors.white, fontSize: 18),
+          style: const TextStyle(
+              color: Colors.white, fontSize: 18, fontWeight: FontWeight.w600),
+        ),
+        Text(
+          "Yaş: $age",
+          style: const TextStyle(
+              color: Colors.white, fontSize: 18, fontStyle: FontStyle.italic),
         ),
       ],
     );
@@ -214,15 +234,16 @@ class _HomeScreenState extends State<HomeScreen> {
                       setState(() {
                         usersList.add({
                           "name": nameController.text,
-                          "surname": surnameController.text
+                          "surname": surnameController.text,
+                          "age": ageController.text
                         });
                       });
 
-                      nameController.clear();
-                      surnameController.clear();
-                      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                        content: Text("Kayıt Başarılı."),
-                      ));
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text("Kayıt Başarılı."),
+                        ),
+                      );
                       print(usersList);
                     } else {
                       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
@@ -242,12 +263,22 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
               Expanded(
                 child: ElevatedButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    nameController.clear();
+                    surnameController.clear();
+                    ageController.clear();
+
+                    setState(() {});
+                    // usersList.removeWhere((element) {
+                    //   return nameController.text.trim() ==
+                    //       element['name']?.trim();
+                    // });
+                  },
                   style: ElevatedButton.styleFrom(
                       fixedSize: const Size(double.infinity, 48),
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(12))),
-                  child: const Text("Sil"),
+                  child: const Text("Temizle"),
                 ),
               ),
             ],
