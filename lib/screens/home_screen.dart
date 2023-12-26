@@ -13,6 +13,10 @@ class _HomeScreenState extends State<HomeScreen> {
   List<Map<String, String>> usersList = [];
   TextEditingController nameController = TextEditingController();
   TextEditingController surnameController = TextEditingController();
+  TextEditingController ageController = TextEditingController();
+  FocusNode nameFocus = FocusNode();
+  FocusNode ageFocusNode = FocusNode();
+  FocusNode surnameFocus = FocusNode();
 
   @override
   Widget build(BuildContext context) {
@@ -39,55 +43,60 @@ class _HomeScreenState extends State<HomeScreen> {
           ]),
       body: [
         SafeArea(
-          child: Padding(
-            padding: const EdgeInsets.all(12),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                fieldContainer(),
-                const SizedBox(
-                  height: 60,
-                ),
-                const Text(
-                  "Üyelerimiz",
-                  style: TextStyle(fontSize: 24),
-                ),
-                const SizedBox(
-                  height: 30,
-                ),
-                Expanded(
-                  child: ListView.builder(
-                    itemCount: usersList.length,
-                    itemBuilder: (context, index) {
-                      return Container(
-                        margin: const EdgeInsets.only(bottom: 12),
-                        padding: const EdgeInsets.all(8),
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(12),
-                            gradient: const LinearGradient(
-                                colors: [Color(0xff220045), Colors.white],
-                                begin: Alignment.center)),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            nameAndSurnameTextArae(
-                                name: usersList[index]['name'] ?? "",
-                                surname: usersList[index]['surname'] ?? ""),
-                            IconButton(
-                              onPressed: () {},
-                              icon: const Icon(
-                                Icons.delete,
-                                color: Colors.red,
-                                size: 32,
-                              ),
-                            )
-                          ],
-                        ),
-                      );
-                    },
+          child: GestureDetector(
+            onTap: () {
+              FocusScope.of(context).requestFocus(FocusNode());
+            },
+            child: Padding(
+              padding: const EdgeInsets.all(12),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  fieldContainer(),
+                  const SizedBox(
+                    height: 60,
                   ),
-                )
-              ],
+                  const Text(
+                    "Üyelerimiz",
+                    style: TextStyle(fontSize: 24),
+                  ),
+                  const SizedBox(
+                    height: 30,
+                  ),
+                  Expanded(
+                    child: ListView.builder(
+                      itemCount: usersList.length,
+                      itemBuilder: (context, index) {
+                        return Container(
+                          margin: const EdgeInsets.only(bottom: 12),
+                          padding: const EdgeInsets.all(8),
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(12),
+                              gradient: const LinearGradient(
+                                  colors: [Color(0xff220045), Colors.white],
+                                  begin: Alignment.center)),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              nameAndSurnameTextArae(
+                                  name: usersList[index]['name'] ?? "",
+                                  surname: usersList[index]['surname'] ?? ""),
+                              IconButton(
+                                onPressed: () {},
+                                icon: const Icon(
+                                  Icons.delete,
+                                  color: Colors.red,
+                                  size: 32,
+                                ),
+                              )
+                            ],
+                          ),
+                        );
+                      },
+                    ),
+                  )
+                ],
+              ),
             ),
           ),
         ),
@@ -129,6 +138,15 @@ class _HomeScreenState extends State<HomeScreen> {
         children: [
           TextField(
             controller: nameController,
+            focusNode: nameFocus,
+            onChanged: (value) {
+              List<String> data = value.split("");
+              isThereSpace(data);
+              if (isThereSpace(data)) {
+                FocusScope.of(context).requestFocus(surnameFocus);
+              }
+            },
+            autofocus: true,
             decoration: const InputDecoration(
               hintText: "Adı",
               fillColor: Colors.white,
@@ -143,6 +161,14 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
           TextField(
             controller: surnameController,
+            focusNode: surnameFocus,
+            onChanged: (value) {
+              List<String> data = value.split("");
+              isThereSpace(data);
+              if (isThereSpace(data)) {
+                FocusScope.of(context).requestFocus(ageFocusNode);
+              }
+            },
             decoration: const InputDecoration(
               fillColor: Colors.white,
               hintText: "Soyadı",
@@ -150,6 +176,29 @@ class _HomeScreenState extends State<HomeScreen> {
               contentPadding: EdgeInsets.only(left: 16),
               border: OutlineInputBorder(
                   borderRadius: BorderRadius.all(Radius.circular(16))),
+            ),
+          ),
+          const SizedBox(
+            height: 16,
+          ),
+          TextField(
+            controller: ageController,
+            focusNode: ageFocusNode,
+            keyboardType: TextInputType.number,
+            onChanged: (value) {
+              List<String> data = value.split("");
+              isThereSpace(data);
+              if (isThereSpace(data)) {
+                FocusScope.of(context).requestFocus(FocusNode());
+              }
+            },
+            decoration: const InputDecoration(
+              hintText: "Yaşı",
+              fillColor: Colors.white,
+              contentPadding: EdgeInsets.only(left: 16),
+              border: OutlineInputBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(16))),
+              filled: true,
             ),
           ),
           const SizedBox(
@@ -206,5 +255,15 @@ class _HomeScreenState extends State<HomeScreen> {
         ],
       ),
     );
+  }
+
+  bool isThereSpace(List<String> list) {
+    for (var element in list) {
+      print("element: $element");
+      if (element == " ") {
+        return true;
+      }
+    }
+    return false;
   }
 }
