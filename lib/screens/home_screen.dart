@@ -8,14 +8,18 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  List<String> liste = ["ali", "veli", "kırkdokuz", "elli"];
+  List<Widget> liste = [];
   int currentIndex = 0;
+  List<Map<String, String>> usersList = [];
+  TextEditingController nameController = TextEditingController();
+  TextEditingController surnameController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       bottomNavigationBar: BottomNavigationBar(
-          onTap: (ali) {
-            currentIndex = ali;
+          onTap: (index) {
+            currentIndex = index;
             setState(() {});
           },
           currentIndex: currentIndex,
@@ -51,26 +55,36 @@ class _HomeScreenState extends State<HomeScreen> {
                 const SizedBox(
                   height: 30,
                 ),
-                Container(
-                  padding: const EdgeInsets.all(8),
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(12),
-                      gradient: const LinearGradient(
-                          colors: [Color(0xff220045), Colors.white],
-                          begin: Alignment.center)),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      nameAndSurnameTextArae(),
-                      IconButton(
-                        onPressed: () {},
-                        icon: const Icon(
-                          Icons.delete,
-                          color: Colors.red,
-                          size: 32,
+                Expanded(
+                  child: ListView.builder(
+                    itemCount: usersList.length,
+                    itemBuilder: (context, index) {
+                      return Container(
+                        margin: const EdgeInsets.only(bottom: 12),
+                        padding: const EdgeInsets.all(8),
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(12),
+                            gradient: const LinearGradient(
+                                colors: [Color(0xff220045), Colors.white],
+                                begin: Alignment.center)),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            nameAndSurnameTextArae(
+                                name: usersList[index]['name'] ?? "",
+                                surname: usersList[index]['surname'] ?? ""),
+                            IconButton(
+                              onPressed: () {},
+                              icon: const Icon(
+                                Icons.delete,
+                                color: Colors.red,
+                                size: 32,
+                              ),
+                            )
+                          ],
                         ),
-                      )
-                    ],
+                      );
+                    },
                   ),
                 )
               ],
@@ -84,16 +98,18 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Column nameAndSurnameTextArae() {
-    return const Column(
+  Column nameAndSurnameTextArae(
+      {required String name, required String surname}) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          "Adı: Ramazan",
-          style: TextStyle(color: Colors.white, fontSize: 18),
+          "Adı: $name",
+          style: const TextStyle(color: Colors.white, fontSize: 18),
         ),
         Text(
-          "Soyadı: Altun",
-          style: TextStyle(color: Colors.white, fontSize: 18),
+          "Soyadı: $surname",
+          style: const TextStyle(color: Colors.white, fontSize: 18),
         ),
       ],
     );
@@ -111,8 +127,9 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       child: Column(
         children: [
-          const TextField(
-            decoration: InputDecoration(
+          TextField(
+            controller: nameController,
+            decoration: const InputDecoration(
               hintText: "Adı",
               fillColor: Colors.white,
               contentPadding: EdgeInsets.only(left: 16),
@@ -124,8 +141,9 @@ class _HomeScreenState extends State<HomeScreen> {
           const SizedBox(
             height: 12,
           ),
-          const TextField(
-            decoration: InputDecoration(
+          TextField(
+            controller: surnameController,
+            decoration: const InputDecoration(
               fillColor: Colors.white,
               hintText: "Soyadı",
               filled: true,
@@ -141,7 +159,28 @@ class _HomeScreenState extends State<HomeScreen> {
             children: [
               Expanded(
                 child: ElevatedButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    if (nameController.text.isNotEmpty &&
+                        surnameController.text.isNotEmpty) {
+                      setState(() {
+                        usersList.add({
+                          "name": nameController.text,
+                          "surname": surnameController.text
+                        });
+                      });
+
+                      nameController.clear();
+                      surnameController.clear();
+                      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                        content: Text("Kayıt Başarılı."),
+                      ));
+                      print(usersList);
+                    } else {
+                      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                        content: Text('Ad-Soyad Alanı Boş Olamaz!'),
+                      ));
+                    }
+                  },
                   style: ElevatedButton.styleFrom(
                       fixedSize: const Size(double.infinity, 48),
                       shape: RoundedRectangleBorder(
