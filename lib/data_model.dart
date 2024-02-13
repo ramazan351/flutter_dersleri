@@ -1,7 +1,37 @@
 void main() {
+  int count = 0;
+
   Market bMarketi = Market.fromMap(data);
   print(bMarketi.items?[0].productColor[0].color);
   // print(bMarketi.items);
+  for (int i = 0; i < (bMarketi.items?.length ?? 0); i++) {
+    if (bMarketi.items?[i].type == "duster") {
+      count = count + 1;
+    }
+  }
+  print(count);
+  for (int i = 0; i < (bMarketi.items?.length ?? 0); i++) {
+    if (bMarketi.items?[i].type == "duster" &&
+        (bMarketi.items?[i].price ?? 0) < 20) {
+      count = count + 1;
+    }
+  }
+  print(count);
+
+  for (int i = 0; i < (bMarketi.items?.length ?? 0); i++) {
+    if (bMarketi.items?[i].type == "pencil") {
+      count = count + 1;
+    }
+  }
+  int colorCount = 0;
+  for (int i = 0; i < (bMarketi.items?.length ?? 0); i++) {
+    if (bMarketi.items?[i].type == "pencil") {
+      for (int j = 0; j < (bMarketi.items?[i].productColor.length ?? 0); j++) {
+        colorCount = colorCount + 1;
+      }
+    }
+  }
+  print(colorCount);
 }
 
 class Market {
