@@ -1,0 +1,61 @@
+class User {
+  String username;
+  int age;
+
+  User(this.username, this.age);
+}
+
+class DataList {
+  static List<User> users = [
+    User('AyşeKaan', 25),
+    User('Emirhan_34', 30),
+    User('Ceren_96', 22),
+    User('Murat_ist38', 28),
+    User('Zeynep_17', 29),
+    User('Tolga_aslan', 27),
+    User('Elif_ist', 26),
+    User('Ahmet34', 32),
+    User('Ebru_78', 31),
+    User('Barış_kral', 33),
+    User('Gizem_23', 24),
+    User('Ali_56tr', 35),
+    User('Esra_k', 30),
+    User('Özgürdeniz', 28),
+    User('Deniz_baba', 29),
+    User('Selin34', 26),
+    User('Berkaytr', 27),
+    User('Nazlı_67', 28),
+    User('Yusuf_istanbul', 30),
+    User('İrem34', 25),
+    User('Mehmet_78', 29),
+    User('Aslı_45', 27),
+    User('Kaan_deniz', 28),
+    User('Sinem_tr', 31),
+    User('Burak_34ist', 33),
+    User('Selma_istanbul', 26),
+    User('Onur_tr', 29),
+    User('Esma34', 28),
+    User('Levent_65', 32),
+    User('Tuğba_34', 30),
+    User('Cem_istanbul', 27),
+    User('Zehra_k', 26),
+    User('Emre_34tr', 29),
+    User('Pınar_98', 28),
+    User('Kaan34', 26),
+    User('Ecem_78', 31),
+    User('İbrahim_tr', 33),
+    User('Merve34', 28),
+    User('Can_45', 27),
+    User('Asena_34', 29),
+    User('Erkan_67', 30),
+    User('İlayda_tr', 28),
+    User('Furkan_34', 32),
+    User('Buse_78', 31),
+    User('Orhan_tr', 33),
+    User('Elifnaz', 25),
+    User('Emre_34', 29),
+    User('İpek_istanbul', 28),
+    User('Ali_34tr', 27),
+    User('Melis_78', 30),
+  ];
+}
