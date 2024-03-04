@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_dersi3/homework/main.dart';
 import 'package:flutter_dersi3/screens/home_screen.dart';
 import 'package:flutter_dersi3/stack/stack_example.dart';
 
@@ -12,7 +13,7 @@ class MainWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const MaterialApp(
-      home: StackExample(),
+      home: KamilHorizontalList(),
     );
   }
 }
