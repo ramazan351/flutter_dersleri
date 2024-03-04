@@ -1,4 +1,7 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class StackExample extends StatefulWidget {
   const StackExample({super.key});
@@ -8,6 +11,29 @@ class StackExample extends StatefulWidget {
 }
 
 class _StackExampleState extends State<StackExample> {
+  // Obtain shared preferences.
+  SharedPreferences? prefs;
+  initPreferenses() async {
+    prefs = await SharedPreferences.getInstance();
+  }
+
+  @override
+  void initState() {
+    initPreferenses();
+    super.initState();
+  }
+
+  Random random = Random();
+  int sayi = 0;
+  int? yazdigimSayi = 0;
+  createAndSaveShared() {
+    sayi = random.nextInt(50);
+    prefs?.setInt("sayi", sayi).whenComplete(() {
+      yazdigimSayi = prefs?.getInt("sayi");
+    });
+    setState(() {});
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -24,7 +50,7 @@ class _StackExampleState extends State<StackExample> {
               left: 0,
               top: 0,
               child: FloatingActionButton(
-                onPressed: () {},
+                onPressed: createAndSaveShared,
                 child: const Text(
                   "1",
                   style: TextStyle(fontSize: 24),
@@ -36,9 +62,9 @@ class _StackExampleState extends State<StackExample> {
               top: 0,
               child: FloatingActionButton(
                 onPressed: () {},
-                child: const Text(
-                  "2",
-                  style: TextStyle(fontSize: 24),
+                child: Text(
+                  "$yazdigimSayi",
+                  style: const TextStyle(fontSize: 24),
                 ),
               ),
             ),
