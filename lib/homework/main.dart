@@ -11,28 +11,28 @@ class KamilHorizontalList extends StatefulWidget {
 class _KamilHorizontalListState extends State<KamilHorizontalList> {
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
+    return Scaffold(
       body: SafeArea(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            SizedBox(
+            const SizedBox(
               height: 50,
             ),
-            Text(
+            const Text(
               'Animals',
               style: TextStyle(
                 color: Colors.black,
                 fontSize: 20,
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 20,
             ),
             SingleChildScrollView(
               scrollDirection: Axis.horizontal,
               child: Row(
-                children: [
+                children: const [
                   ListItem(
                     imageText: 'Aslan',
                     photoName: 'aslan.jpg',
@@ -60,23 +60,23 @@ class _KamilHorizontalListState extends State<KamilHorizontalList> {
                 ],
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 50,
             ),
-            Text(
+            const Text(
               'Cars',
               style: TextStyle(
                 color: Colors.black,
                 fontSize: 20,
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 20,
             ),
             SingleChildScrollView(
               scrollDirection: Axis.horizontal,
               child: Row(
-                children: [
+                children: const [
                   ListItem(
                     imageText: 'Bugatti',
                     photoName: 'bugatti.jpg',

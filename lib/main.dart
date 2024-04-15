@@ -1,19 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_dersi3/homework/main.dart';
-import 'package:flutter_dersi3/screens/home_screen.dart';
-import 'package:flutter_dersi3/stack/stack_example.dart';
+import 'package:flutter_dersi3/map_example/map_example.dart';
 
-void main(List<String> args) {
-  runApp(const MainWidget());
+void main() {
+  runApp(const MyApp());
 }
 
-class MainWidget extends StatelessWidget {
-  const MainWidget({super.key});
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
     return const MaterialApp(
-      home: KamilHorizontalList(),
+      home: Scaffold(
+        body: FlutterMapExampleScreen(),
+      ),
     );
   }
 }
