@@ -5,7 +5,7 @@ void main(List<String> args) {
     MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-          scaffoldBackgroundColor: Colors.white,
+          scaffoldBackgroundColor: const Color.fromARGB(255, 183, 167, 167),
           primaryColor: Colors.amber,
           appBarTheme: const AppBarTheme(color: Colors.purple)),
       home: const MyHomePage(),
