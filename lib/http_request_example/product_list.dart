@@ -84,13 +84,7 @@ class _ProductListState extends State<ProductList> {
                             context,
                             MaterialPageRoute(
                               builder: (context) => ProductDetails(
-                                id: item.id,
-                                brand: item.brand,
-                                category: item.category,
-                                description: item.description,
-                                price: item.price,
-                                title: item.title,
-                                thumbnail: item.thumbnail,
+                                product: item,
                               ),
                             ));
                       },
@@ -107,13 +101,7 @@ class _ProductListState extends State<ProductList> {
                                     context,
                                     MaterialPageRoute(
                                       builder: (context) => ProductDetails(
-                                        id: item.id,
-                                        brand: item.brand,
-                                        category: item.category,
-                                        description: item.description,
-                                        price: item.price,
-                                        title: item.title,
-                                        thumbnail: item.thumbnail,
+                                        product: item,
                                       ),
                                     ));
                               },
