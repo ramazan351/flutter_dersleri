@@ -1,43 +1,30 @@
-import 'dart:async';
-import 'dart:math';
-
 import 'package:flutter/material.dart';
+import 'dart:async';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_map_location_marker/flutter_map_location_marker.dart';
 import 'package:latlong2/latlong.dart';
 
-class LiveLocationTest extends StatefulWidget {
-  const LiveLocationTest({super.key});
+class LiveLocationTested extends StatefulWidget {
+  const LiveLocationTested({super.key});
 
   @override
-  State<LiveLocationTest> createState() => _LiveLocationTestState();
+  State<LiveLocationTested> createState() => _LiveLocationTestedState();
 }
 
-class _LiveLocationTestState extends State<LiveLocationTest> {
-  late bool
-      _navigationMode; // kullancının konumu açık yada kapalı olduğunu kontrol etmek için kullandım
-  late int
-      _pointerCount; // kullanıcı harita ile ne kadar etkileşime girdiğini gözlemlemek için kullandım
+class _LiveLocationTestedState extends State<LiveLocationTested> {
   late AlignOnUpdate _alignPositionOnUpdate;
-  late AlignOnUpdate _alignDirectionOnUpdate;
   late final StreamController<double?> _alignPositionStreamController;
-  late final StreamController<void> _alignDirectionStreamController;
 
   @override
   void initState() {
     super.initState();
-    _navigationMode = false;
-    _pointerCount = 0;
-    _alignPositionOnUpdate = AlignOnUpdate.never;
-    _alignDirectionOnUpdate = AlignOnUpdate.never;
+    _alignPositionOnUpdate = AlignOnUpdate.always;
     _alignPositionStreamController = StreamController<double?>();
-    _alignDirectionStreamController = StreamController<void>();
   }
 
   @override
   void dispose() {
     _alignPositionStreamController.close();
-    _alignDirectionStreamController.close();
     super.dispose();
   }
 
@@ -45,17 +32,21 @@ class _LiveLocationTestState extends State<LiveLocationTest> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Live Location Test'),
+        title: const Text('live Location Tested'),
       ),
       body: FlutterMap(
         options: MapOptions(
           initialCenter: const LatLng(0, 0),
-          initialZoom: 1,
+          initialZoom: 10,
           minZoom: 0,
           maxZoom: 19,
-          onPointerDown: _onPointerDown,
-          onPointerUp: _onPointerUp,
-          onPointerCancel: _onPointerUp,
+          onPositionChanged: (MapPosition position, bool hasGesture) {
+            if (hasGesture && _alignPositionOnUpdate != AlignOnUpdate.never) {
+              setState(
+                () => _alignPositionOnUpdate = AlignOnUpdate.never,
+              );
+            }
+          },
         ),
         children: [
           TileLayer(
@@ -65,14 +56,8 @@ class _LiveLocationTestState extends State<LiveLocationTest> {
             maxZoom: 19,
           ),
           CurrentLocationLayer(
-            focalPoint: const FocalPoint(
-              ratio: Point(0.0, 1.0),
-              offset: Point(0.0, -60.0),
-            ),
             alignPositionStream: _alignPositionStreamController.stream,
-            alignDirectionStream: _alignDirectionStreamController.stream,
             alignPositionOnUpdate: _alignPositionOnUpdate,
-            alignDirectionOnUpdate: _alignDirectionOnUpdate,
             style: const LocationMarkerStyle(
               marker: DefaultLocationMarker(
                 child: Icon(
@@ -89,27 +74,16 @@ class _LiveLocationTestState extends State<LiveLocationTest> {
             child: Padding(
               padding: const EdgeInsets.all(20.0),
               child: FloatingActionButton(
-                backgroundColor: _navigationMode ? Colors.blue : Colors.grey,
-                foregroundColor: Colors.white,
                 onPressed: () {
                   setState(
-                    () {
-                      _navigationMode = !_navigationMode;
-                      _alignPositionOnUpdate = _navigationMode
-                          ? AlignOnUpdate.always
-                          : AlignOnUpdate.never;
-                      _alignDirectionOnUpdate = _navigationMode
-                          ? AlignOnUpdate.always
-                          : AlignOnUpdate.never;
-                    },
+                    () => _alignPositionOnUpdate = AlignOnUpdate.always,
                   );
-                  if (_navigationMode) {
-                    _alignPositionStreamController.add(18);
-                    _alignDirectionStreamController.add(null);
-                  }
+
+                  _alignPositionStreamController.add(18);
                 },
                 child: const Icon(
-                  Icons.navigation_outlined,
+                  Icons.my_location,
+                  color: Colors.white,
                 ),
               ),
             ),
@@ -117,24 +91,5 @@ class _LiveLocationTestState extends State<LiveLocationTest> {
         ],
       ),
     );
-  }
-
-  void _onPointerDown(e, l) {
-    _pointerCount++;
-    setState(() {
-      _alignPositionOnUpdate = AlignOnUpdate.never;
-      _alignDirectionOnUpdate = AlignOnUpdate.never;
-    });
-  }
-
-  void _onPointerUp(e, l) {
-    if (--_pointerCount == 0 && _navigationMode) {
-      setState(() {
-        _alignPositionOnUpdate = AlignOnUpdate.always;
-        _alignDirectionOnUpdate = AlignOnUpdate.always;
-      });
-      _alignPositionStreamController.add(18);
-      _alignDirectionStreamController.add(null);
-    }
   }
 }
