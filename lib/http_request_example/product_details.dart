@@ -8,16 +8,7 @@ class ProductDetails extends StatefulWidget {
   String? brand;
   String? category;
   String? thumbnail;
-  ProductDetails({
-    super.key,
-    this.id,
-    this.title,
-    this.description,
-    this.brand,
-    this.price,
-    this.category,
-    this.thumbnail,
-  });
+  ProductDetails({super.key, this.id, this.title, this.description, this.brand, this.price, this.category, this.thumbnail});
 
   @override
   State<ProductDetails> createState() => _ProductDetailsState();

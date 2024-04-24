@@ -78,30 +78,47 @@ class _ProductListState extends State<ProductList> {
                     var item =
                         searchList.isNotEmpty == true ? (index < searchList.length ? searchList[index] : productList[index]) : productList[index];
 
-                    return ListTile(
-                        leading: Image(
-                          image: NetworkImage(item.thumbnail!),
-                          height: 50,
-                          width: 50,
-                        ),
-                        title: Text(item.title!),
-                        trailing: IconButton(
-                            onPressed: () {
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => ProductDetails(
-                                      id: item.id,
-                                      brand: item.brand,
-                                      category: item.category,
-                                      description: item.description,
-                                      price: item.price,
-                                      title: item.title,
-                                      thumbnail: item.thumbnail,
-                                    ),
-                                  ));
-                            },
-                            icon: const Icon(Icons.arrow_right)));
+                    return GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => ProductDetails(
+                                id: item.id,
+                                brand: item.brand,
+                                category: item.category,
+                                description: item.description,
+                                price: item.price,
+                                title: item.title,
+                                thumbnail: item.thumbnail,
+                              ),
+                            ));
+                      },
+                      child: ListTile(
+                          leading: Image(
+                            image: NetworkImage(item.thumbnail!),
+                            height: 50,
+                            width: 50,
+                          ),
+                          title: Text(item.title!),
+                          trailing: IconButton(
+                              onPressed: () {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => ProductDetails(
+                                        id: item.id,
+                                        brand: item.brand,
+                                        category: item.category,
+                                        description: item.description,
+                                        price: item.price,
+                                        title: item.title,
+                                        thumbnail: item.thumbnail,
+                                      ),
+                                    ));
+                              },
+                              icon: const Icon(Icons.arrow_right))),
+                    );
                   },
                 ),
               ),
