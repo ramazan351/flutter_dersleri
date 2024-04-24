@@ -1,14 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_dersi3/http_request_example/product_model.dart';
 
 class ProductDetails extends StatefulWidget {
-  int? id;
-  String? title;
-  String? description;
-  String? price;
-  String? brand;
-  String? category;
-  String? thumbnail;
-  ProductDetails({super.key, this.id, this.title, this.description, this.brand, this.price, this.category, this.thumbnail});
+  Products? product;
+  ProductDetails({super.key, this.product});
 
   @override
   State<ProductDetails> createState() => _ProductDetailsState();
@@ -29,17 +24,83 @@ class _ProductDetailsState extends State<ProductDetails> {
             child: Column(
               children: [
                 Image(
-                  image: NetworkImage('${widget.thumbnail}'),
+                  image: NetworkImage('${widget.product!.thumbnail}'),
+                ),
+                const Padding(
+                  padding: EdgeInsets.all(12.0),
+                  child: Align(
+                    alignment: Alignment.topLeft,
+                    child: Text(
+                      "Ürün Resimleri",
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  height: 235,
+                  child: GridView.builder(
+                    itemCount: widget.product!.images!.length,
+                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 2,
+                      crossAxisSpacing: 4,
+                      mainAxisSpacing: 4,
+                    ),
+                    itemBuilder: (context, index) {
+                      return GridTile(
+                        child: Image.network(widget.product!.images![index]),
+                      );
+                    },
+                  ),
                 ),
                 const SizedBox(
                   height: 20,
                 ),
-                Align(alignment: Alignment.centerLeft, child: Text("Ürün Numarası: ${widget.id}")),
-                Align(alignment: Alignment.centerLeft, child: Text("Ürün Adı: ${widget.title}")),
-                Align(alignment: Alignment.centerLeft, child: Text("Ürün Markası: ${widget.brand}")),
-                Align(alignment: Alignment.centerLeft, child: Text("Ürün Kategorisi: ${widget.category}")),
-                Align(alignment: Alignment.centerLeft, child: Text("Ürün Açıklama: ${widget.description}")),
-                Align(alignment: Alignment.centerLeft, child: Text("Ürün Fiyatı: ${widget.price}\$ ")),
+                const Padding(
+                  padding: EdgeInsets.all(12.0),
+                  child: Align(
+                    alignment: Alignment.topLeft,
+                    child: Text(
+                      "Ürün Detayları",
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                ),
+                DataTable(
+                  columnSpacing: 50,
+                  dataRowHeight: 60,
+                  columns: const [
+                    DataColumn(label: Text('Başlık')),
+                    DataColumn(label: Text('Özellik')),
+                  ],
+                  rows: [
+                    DataRow(cells: [
+                      const DataCell(Text('Ürün Numarası')),
+                      DataCell(Text('${widget.product!.id}')),
+                    ]),
+                    DataRow(cells: [
+                      const DataCell(Text('Ürün Adı')),
+                      DataCell(Text('${widget.product!.title}')),
+                    ]),
+                    DataRow(cells: [
+                      const DataCell(
+                        Text('Ürün Markası'),
+                      ),
+                      DataCell(Text('${widget.product!.brand}')),
+                    ]),
+                    DataRow(cells: [
+                      const DataCell(Text('Ürün Kategorisi')),
+                      DataCell(Text('${widget.product!.category}')),
+                    ]),
+                    DataRow(cells: [
+                      const DataCell(Text('Ürün Açıklama')),
+                      DataCell(Text('${widget.product!.description}')),
+                    ]),
+                    DataRow(cells: [
+                      const DataCell(Text('Ürün Fiyatı')),
+                      DataCell(Text(' ${widget.product!.price}\$')),
+                    ]),
+                  ],
+                ),
               ],
             ),
           ),
