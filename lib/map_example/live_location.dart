@@ -12,19 +12,28 @@ class LiveLocationTested extends StatefulWidget {
 }
 
 class _LiveLocationTestedState extends State<LiveLocationTested> {
+  late bool _navigationMode;
+  late int _pointerCount;
   late AlignOnUpdate _alignPositionOnUpdate;
+  late AlignOnUpdate _alignDirectionOnUpdate;
   late final StreamController<double?> _alignPositionStreamController;
+  late final StreamController<void> _alignDirectionStreamController;
 
   @override
   void initState() {
     super.initState();
+    _navigationMode = false;
+    _pointerCount = 0;
     _alignPositionOnUpdate = AlignOnUpdate.always;
+    _alignDirectionOnUpdate = AlignOnUpdate.always;
     _alignPositionStreamController = StreamController<double?>();
+    _alignDirectionStreamController = StreamController<void>();
   }
 
   @override
   void dispose() {
     _alignPositionStreamController.close();
+    _alignDirectionStreamController.close();
     super.dispose();
   }
 
@@ -32,7 +41,7 @@ class _LiveLocationTestedState extends State<LiveLocationTested> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('live Location Tested'),
+        title: const Text('Navigation Example'),
       ),
       body: FlutterMap(
         options: MapOptions(
@@ -40,6 +49,9 @@ class _LiveLocationTestedState extends State<LiveLocationTested> {
           initialZoom: 10,
           minZoom: 0,
           maxZoom: 19,
+          onPointerDown: _onPointerDown,
+          onPointerUp: _onPointerUp,
+          onPointerCancel: _onPointerUp,
           onPositionChanged: (MapPosition position, bool hasGesture) {
             if (hasGesture && _alignPositionOnUpdate != AlignOnUpdate.never) {
               setState(
@@ -57,7 +69,9 @@ class _LiveLocationTestedState extends State<LiveLocationTested> {
           ),
           CurrentLocationLayer(
             alignPositionStream: _alignPositionStreamController.stream,
+            alignDirectionStream: _alignDirectionStreamController.stream,
             alignPositionOnUpdate: _alignPositionOnUpdate,
+            alignDirectionOnUpdate: _alignDirectionOnUpdate,
             style: const LocationMarkerStyle(
               marker: DefaultLocationMarker(
                 child: Icon(
@@ -74,16 +88,27 @@ class _LiveLocationTestedState extends State<LiveLocationTested> {
             child: Padding(
               padding: const EdgeInsets.all(20.0),
               child: FloatingActionButton(
+                backgroundColor: _navigationMode ? Colors.blue : Colors.grey,
+                foregroundColor: Colors.white,
                 onPressed: () {
                   setState(
-                    () => _alignPositionOnUpdate = AlignOnUpdate.always,
+                    () {
+                      _navigationMode = !_navigationMode;
+                      _alignPositionOnUpdate = _navigationMode
+                          ? AlignOnUpdate.always
+                          : AlignOnUpdate.never;
+                      _alignDirectionOnUpdate = _navigationMode
+                          ? AlignOnUpdate.always
+                          : AlignOnUpdate.never;
+                    },
                   );
-
-                  _alignPositionStreamController.add(18);
+                  if (_navigationMode) {
+                    _alignPositionStreamController.add(18);
+                    _alignDirectionStreamController.add(null);
+                  }
                 },
                 child: const Icon(
-                  Icons.my_location,
-                  color: Colors.white,
+                  Icons.navigation_outlined,
                 ),
               ),
             ),
@@ -91,5 +116,24 @@ class _LiveLocationTestedState extends State<LiveLocationTested> {
         ],
       ),
     );
+  }
+
+  void _onPointerDown(e, l) {
+    _pointerCount++;
+    setState(() {
+      _alignPositionOnUpdate = AlignOnUpdate.never;
+      _alignDirectionOnUpdate = AlignOnUpdate.never;
+    });
+  }
+
+  void _onPointerUp(e, l) {
+    if (--_pointerCount == 0 && _navigationMode) {
+      setState(() {
+        _alignPositionOnUpdate = AlignOnUpdate.always;
+        _alignDirectionOnUpdate = AlignOnUpdate.always;
+      });
+      _alignPositionStreamController.add(18);
+      _alignDirectionStreamController.add(null);
+    }
   }
 }
