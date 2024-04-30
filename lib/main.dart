@@ -20,10 +20,10 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return ValueListenableBuilder(
         valueListenable: InternetManager.connectionStatus,
-        builder: (context, widget, ww) {
+        builder: (context, value, widget) {
           return MaterialApp(
             builder: ((context, child) {
-              if (InternetManager.connectionStatus.value != ConnectivityResult.none) {
+              if (value) {
                 return child!;
               } else {
                 return Container(
