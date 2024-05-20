@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "169630621315",
+    "project_id": "gasmek-mobil-app",
+    "storage_bucket": "gasmek-mobil-app.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:169630621315:android:b47d37db593e21303d45b6",
+        "android_client_info": {
+          "package_name": "com.example.flutter_dersi3"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBz2VT-dyR436sTcyHhHG_Ek7pMZb-wzns"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
